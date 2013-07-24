@@ -28,7 +28,7 @@ def tokenize(sometext):
    the regular expression (\W)"""
 
    # return re.split("(\W)", sometext)
-   return re.split("\W", sometext)
+   return re.split("^\w", sometext)
 
 
 def relativizeFP(fp):
