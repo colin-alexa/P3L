@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
+import re, sys
 from operator import itemgetter
 
 
@@ -28,7 +28,7 @@ def tokenize(sometext):
    the regular expression (\W)"""
 
    # return re.split("(\W)", sometext)
-   return re.split("\W", sometext)
+   return re.split("[^\w`]", sometext)
 
 
 def relativizeFP(fp):
@@ -46,9 +46,6 @@ def getNGramModel(tokens, n):
    return mydict
 
 
-
-
-
 def makeFrequencyProfile(tokenlist):
    """Count elements in the tokenlist"""
    # count tokens and generate a frequency profile
@@ -62,13 +59,13 @@ def makeFrequencyProfile(tokenlist):
    return mydict
 
 
-def prettyPrintFRP(fp, byfrequency=True, myreverse=False):
+def prettyPrintFRP(fp, byfrequency=True, myreverse=False, file=sys.stdout):
    if byfrequency:
       myitems = sorted( fp.items(), key=itemgetter(1), reverse=myreverse )
    else:
       myitems = sorted( fp.items(), key=itemgetter(0), reverse=myreverse )
    for x in myitems:
-      print(x[0], x[1], sep="\t")
+      print(x[0], x[1], sep="\t", file = file)
 
 
 
