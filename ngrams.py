@@ -6,6 +6,10 @@ iStopWords = iStopWords + [ x.capitalize() for x in iStopWords ]
 
 mytokens = tokenize( getTextFromFile("Dante.txt") )
 
+junksymbols = " ,;:-+=()[]'\"?!$%.<>´"
+
+removeJunk(mytokens, junksymbols)
+
 mytokens = [ x  for x in mytokens if x ]
 
 mytokens = [ x  for x in mytokens if x not in iStopWords ]
