@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+
 
 import sys, codecs
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
