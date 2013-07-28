@@ -5,34 +5,41 @@
 import sys, codecs
 sys.stdout = codecs.getwriter('utf-8')(sys.stdout.detach())
 
-from corpus import *
+from dcavarCorpus import *
 from math import log
 
-mygermantokens = tokenize(loadTextFromFile ("germanText.txt"))
-myfrenchtokens = tokenize(loadTextFromFile ("frenchText.txt"))
+mygermantokens = [a for a in getTextFromFile ("germanText.txt")]
+myfrenchtokens = [a for a in getTextFromFile ("frenchText.txt")]
 
-junksymbols = " ,;:-+=()[]'\"?!$%.<>´"
+# junksymbols = " ,;:-+=()[]'\"?!$%.<>`"
+# 
+# removeJunk(mygermantokens, junksymbols)
+# removeJunk(myfrenchtokens, junksymbols)
 
-removeJunk(mygermantokens, junksymbols)
-removeJunk(myfrenchtokens, junksymbols)
+mygermandict = getNGramModel(mygermantokens, 3)
+relativizeFP(mygermandict)
 
-mygermandict = getTokenCounts(mygermantokens)
-relativizeTokenCounts(mygermandict)
+myfrenchdict = getNGramModel(myfrenchtokens, 3)
+relativizeFP(myfrenchdict)
 
-myfrenchdict = getTokenCounts(myfrenchtokens)
-relativizeTokenCounts(myfrenchdict)
+# testText = getTextFromFile("GermanCompanies.txt")
 
-unknowntext = ""
+companies = getTextFromFile("FrenchCompanies.txt").splitlines()
+companies = [ (a,getNGramModel(a,3)) for a in companies]
 
-ukntokens = tokenize(unknowntext)
-hpgprob = 0.0
-bbcprob = 0.0
-for token in ukntokens:
-    frenchprob += log(myfrenchdict.get(token, 0.000000000001))
-    germanprob += log(mygermandict.get(token, 0.000000000001))
-if frenchprob > germanprob:
-    print("This text is probably French.")
-else:
-    print("This text is probably German")
-print("frenchprob:", frenchprob)
-print("germanprob:", germanprob)
+# ukntokens = getNGramModel(testText,3)
+
+for company in companies:
+  frenchprob = 0.0
+  germanprob = 0.0
+  for token in company[1]:
+      frenchprob += log(myfrenchdict.get(token, 0.000000000001))
+      germanprob += log(mygermandict.get(token, 0.000000000001))
+  if frenchprob > germanprob:
+      print( company[0] + "; This text is probably French.")
+  elif germanprob > frenchprob:
+      print( company[0] + "; This text is probably German.")
+  else:
+      print( company[0] + "; The classifier could not distinguish the languages.")
+  print("frenchprob:", frenchprob)
+  print("germanprob:", germanprob, '\n')

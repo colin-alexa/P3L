@@ -13,7 +13,7 @@ def getTextFromFile(filename):
 
    # open a file and read the text into memory
    try:
-      myfile = open(filename, mode='r', encoding='utf-8')
+      myfile = open(filename, mode='r')
       mytext = myfile.read()
       myfile.close()
    except IOError:
